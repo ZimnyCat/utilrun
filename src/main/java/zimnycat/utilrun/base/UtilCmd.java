@@ -51,7 +51,7 @@ public class UtilCmd extends CommandBase {
                         for (SettingBase setting : util.getSettings()) {
                             if (setting instanceof SettingNum)
                                 clientMessage(setting.name + Utilrun.highlight(" = ") + setting.num().value
-                                        + " (" + setting.num().min + Utilrun.highlight("-") + setting.num().max + ")");
+                                        + " (" + setting.num().getMin() + Utilrun.highlight("-") + setting.num().getMax() + ")");
                             if (setting instanceof SettingString)
                                 clientMessage(setting.name + Utilrun.highlight(" = ") + "\"" + setting.string().value + "\"");
                             if (setting instanceof SettingBool)
@@ -92,5 +92,5 @@ public class UtilCmd extends CommandBase {
         }
     }
 
-    public boolean isValid(SettingNum setting, double val) { return val >= setting.min && val <= setting.max; }
+    public boolean isValid(SettingNum setting, double val) { return val >= setting.getMin() && val <= setting.getMax(); }
 }

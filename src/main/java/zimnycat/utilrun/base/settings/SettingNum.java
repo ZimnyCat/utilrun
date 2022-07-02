@@ -4,8 +4,8 @@ import zimnycat.utilrun.base.SettingBase;
 
 public class SettingNum extends SettingBase {
     public double value;
-    public double min;
-    public double max;
+    private final double min;
+    private final double max;
 
     public SettingNum(String name, double value, double min, double max) {
         this.name = name;
@@ -13,4 +13,8 @@ public class SettingNum extends SettingBase {
         this.min = min;
         this.max = max;
     }
+
+    public double getMin() { return min; }
+
+    public double getMax() { return max; }
 }
