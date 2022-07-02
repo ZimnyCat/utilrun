@@ -58,7 +58,7 @@ public class UtilCmd extends CommandBase {
                                 clientMessage(setting.name + Utilrun.highlight(" = ") + setting.bool().value);
                         }
                     }
-                    case 3, 4 -> {
+                    case 3, 4, 5 -> {
                         SettingBase setting = util.setting(args[2]);
                         if (setting instanceof SettingNum) {
                             if (args.length == 3)
@@ -66,7 +66,8 @@ public class UtilCmd extends CommandBase {
                             else {
                                 try {
                                     double val = Double.parseDouble(args[3]);
-                                    if (isValid(setting.num(), val)) setting.num().value = val;
+                                    if (isValid(setting.num(), val) || (args.length == 5 && args[4].equalsIgnoreCase("force")))
+                                        setting.num().value = val;
                                     else clientMessage("Invalid value");
                                 } catch (Exception e) {
                                     clientMessage("Not a number");
