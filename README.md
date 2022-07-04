@@ -1,5 +1,5 @@
 # utilrun
-### Minecraft utility engine
+### Minecraft utility mod engine
 ### Fabric 1.19
 ### Default command prefix: >>
 

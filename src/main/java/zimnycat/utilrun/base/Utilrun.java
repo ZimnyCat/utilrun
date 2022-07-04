@@ -16,7 +16,10 @@ public class Utilrun implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
-		if (!FileLib.path.toFile().exists()) FileLib.path.toFile().mkdirs();
+		if (!FileLib.path.toFile().exists()) {
+			logger.info("Creating " + name + " folder");
+			FileLib.path.toFile().mkdirs();
+		}
 
 		Manager manager = new Manager();
 		manager.init();
