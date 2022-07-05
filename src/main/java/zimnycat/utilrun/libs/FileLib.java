@@ -16,9 +16,9 @@ public class FileLib {
     public static void write(String fileName, String content, WriteMode mode) {
         Path filePath = path.resolve(fileName);
         try {
-            if (!filePath.toFile().exists()) Files.createFile(filePath);
+            createFile(filePath.getFileName().toString());
             String oldContent = (mode == WriteMode.APPEND ? new String(Files.readAllBytes(filePath)) : "");
-            FileWriter fw = new FileWriter(path.resolve(fileName).toFile());
+            FileWriter fw = new FileWriter(filePath.toFile());
             fw.write(oldContent + content);
             fw.close();
         } catch (Exception e ) {
@@ -35,8 +35,16 @@ public class FileLib {
         return new ArrayList<>();
     }
 
+    public static void createFile(String fileName) {
+        try {
+            if (!path.resolve(fileName).toFile().exists()) Files.createFile(path.resolve(fileName));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public enum WriteMode {
-        REWRITE,
+        OVERWRITE,
         APPEND
     }
 }

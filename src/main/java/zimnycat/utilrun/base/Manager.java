@@ -1,12 +1,19 @@
 package zimnycat.utilrun.base;
 
 import com.google.common.eventbus.Subscribe;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.network.packet.c2s.play.ChatMessageC2SPacket;
 import net.minecraft.text.Text;
 import org.apache.commons.lang3.ArrayUtils;
 import org.reflections.Reflections;
+import zimnycat.utilrun.base.settings.SettingBool;
+import zimnycat.utilrun.base.settings.SettingNum;
+import zimnycat.utilrun.base.settings.SettingString;
 import zimnycat.utilrun.events.SendPacketEvent;
+import zimnycat.utilrun.libs.FileLib;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +45,28 @@ public class Manager {
                 Utilrun.logger.info("Failed to load " + clazz.getSimpleName());
             }
         });
+
+        try {
+            StringBuilder sb = new StringBuilder();
+            FileLib.read("settings.json").forEach(sb::append);
+            JsonObject data = JsonParser.parseString(sb.toString()).getAsJsonObject();
+
+            utils.forEach(u -> {
+                JsonElement je = data.get(u.getName().toLowerCase());
+                if (je != null) {
+                    u.getSettings().forEach(s -> {
+                        JsonElement val = je.getAsJsonObject().get(s.name.toLowerCase());
+                        if (val != null) {
+                            if (s instanceof SettingNum) s.num().value = val.getAsDouble();
+                            if (s instanceof SettingString) s.string().value = val.getAsString();
+                            if (s instanceof SettingBool) s.bool().value = val.getAsBoolean();
+                        }
+                    });
+                }
+            });
+        } catch (Exception e) {
+            FileLib.createFile("settings.json");
+        }
     }
 
     @Subscribe
