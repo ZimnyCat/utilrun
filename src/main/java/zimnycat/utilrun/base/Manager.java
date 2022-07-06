@@ -1,9 +1,7 @@
 package zimnycat.utilrun.base;
 
 import com.google.common.eventbus.Subscribe;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import com.google.gson.*;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.network.packet.c2s.play.ChatMessageC2SPacket;
 import net.minecraft.text.Text;
@@ -12,6 +10,7 @@ import org.reflections.Reflections;
 import zimnycat.utilrun.base.settings.SettingBool;
 import zimnycat.utilrun.base.settings.SettingNum;
 import zimnycat.utilrun.base.settings.SettingString;
+import zimnycat.utilrun.events.ClientStopEvent;
 import zimnycat.utilrun.events.SendPacketEvent;
 import zimnycat.utilrun.libs.FileLib;
 
@@ -88,6 +87,24 @@ public class Manager {
         }
 
         runCommand(msg.replace(Utilrun.prefix, ""));
+    }
+
+    @Subscribe
+    public void saveSettings(ClientStopEvent event) {
+        JsonObject data = new JsonObject();
+        Manager.utils.forEach(u -> {
+            if (!u.getSettings().isEmpty()) {
+                JsonObject settings = new JsonObject();
+                u.getSettings().forEach(s -> {
+                    if (s instanceof SettingNum) settings.addProperty(s.name.toLowerCase(), s.num().value);
+                    if (s instanceof SettingString) settings.addProperty(s.name.toLowerCase(), s.string().value);
+                    if (s instanceof SettingBool) settings.addProperty(s.name.toLowerCase(), s.bool().value);
+                });
+                data.add(u.getName().toLowerCase(), settings);
+            }
+        });
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        FileLib.write("settings.json", gson.toJson(data), FileLib.WriteMode.OVERWRITE);
     }
 
     public static void runCommand(String cmd) {
