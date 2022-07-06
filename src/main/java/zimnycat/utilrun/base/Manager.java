@@ -45,6 +45,7 @@ public class Manager {
             }
         });
 
+        Utilrun.logger.info("Loading settings");
         try {
             StringBuilder sb = new StringBuilder();
             FileLib.read("settings.json").forEach(sb::append);
@@ -91,6 +92,7 @@ public class Manager {
 
     @Subscribe
     public void saveSettings(ClientStopEvent event) {
+        Utilrun.logger.info("Saving settings");
         JsonObject data = new JsonObject();
         Manager.utils.forEach(u -> {
             if (!u.getSettings().isEmpty()) {
