@@ -48,7 +48,7 @@ public class UtilBase {
 
     public void toggle() {
         setEnabled(!enabled);
-        clientMessage(enabled ? "enabled" : "disabled");
+        clientMessage(Utilrun.highlight(enabled ? "enabled" : "disabled"));
     }
 
     public void clientMessage(String msg) {
