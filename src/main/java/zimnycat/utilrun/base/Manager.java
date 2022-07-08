@@ -11,6 +11,7 @@ import zimnycat.utilrun.base.settings.SettingBool;
 import zimnycat.utilrun.base.settings.SettingNum;
 import zimnycat.utilrun.base.settings.SettingString;
 import zimnycat.utilrun.events.ClientStopEvent;
+import zimnycat.utilrun.events.KeyPressEvent;
 import zimnycat.utilrun.events.SendPacketEvent;
 import zimnycat.utilrun.libs.FileLib;
 
@@ -26,6 +27,7 @@ public class Manager {
     public void init() {
         Utilrun.logger.info("Loading commands");
         commands.add(new UtilCmd());
+        commands.add(new BindCmd());
         Reflections ref = new Reflections(this.getClass().getPackage().getName().replace("base", "commands"));
         ref.getSubTypesOf(CommandBase.class).forEach(clazz -> {
             try {
@@ -107,6 +109,18 @@ public class Manager {
         });
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         FileLib.write("settings.json", gson.toJson(data), FileLib.WriteMode.OVERWRITE);
+    }
+
+    @Subscribe
+    public void keyPress(KeyPressEvent event) {
+        if (!FileLib.path.resolve("binds.json").toFile().exists()) return;
+
+        String key = String.valueOf(event.getKey());
+        StringBuilder sb = new StringBuilder();
+        FileLib.read("binds.json").forEach(sb::append);
+        JsonArray array = JsonParser.parseString(sb.toString()).getAsJsonObject().getAsJsonArray(key);
+
+        if (array != null) array.forEach(element -> runCommand(element.getAsString()));
     }
 
     public static void runCommand(String cmd) {

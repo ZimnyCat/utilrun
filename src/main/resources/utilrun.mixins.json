@@ -8,7 +8,8 @@
   "client": [
     "MClientConnection",
     "MClientPlayerEntity",
-    "MMinecraftClient"
+    "MMinecraftClient",
+    "MKeyboard"
   ],
   "injectors": {
     "defaultRequire": 1
