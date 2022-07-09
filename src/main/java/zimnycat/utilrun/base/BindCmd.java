@@ -16,7 +16,12 @@ public class BindCmd extends CommandBase {
             return;
         }
 
-        String code = String.valueOf(InputUtil.fromTranslationKey("key.keyboard." + args[0].toLowerCase()).getCode());
+        String code = null;
+        try {
+            code = String.valueOf(InputUtil.fromTranslationKey("key.keyboard." + args[0].toLowerCase()).getCode());
+        } catch (Exception e) { clientMessage("Invalid key"); }
+        if (code == null) return;
+
         if (!FileLib.path.resolve("binds.json").toFile().exists()) {
             FileLib.createFile("binds.json");
             FileLib.write("binds.json", "{}", FileLib.WriteMode.OVERWRITE);
@@ -30,6 +35,7 @@ public class BindCmd extends CommandBase {
         if (args[1].equalsIgnoreCase("clear")) {
             data.remove(code);
             FileLib.write("binds.json", gson.toJson(data), FileLib.WriteMode.OVERWRITE);
+            clientMessage("Cleared " + Utilrun.highlight(args[0] + " (" + code + ")"));
             return;
         }
 
@@ -44,5 +50,8 @@ public class BindCmd extends CommandBase {
         else data.get(code).getAsJsonArray().add(builder.substring(1));
 
         FileLib.write("binds.json", gson.toJson(data), FileLib.WriteMode.OVERWRITE);
+        clientMessage(
+                "Bound " + Utilrun.highlight("\"" + builder.substring(1) + "\"") + " to " + Utilrun.highlight(args[0] + " (" + code + ")")
+        );
     }
 }
