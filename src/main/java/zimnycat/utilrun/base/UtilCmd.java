@@ -67,7 +67,7 @@ public class UtilCmd extends CommandBase {
                                 try {
                                     double val = Double.parseDouble(args[3]);
                                     if (isValid(setting.num(), val) || (args.length == 5 && args[4].equalsIgnoreCase("force")))
-                                        setting.num().value = val;
+                                        setting.num().setValue(val);
                                     else clientMessage("Invalid value");
                                 } catch (Exception e) {
                                     clientMessage("Not a number");
@@ -76,15 +76,15 @@ public class UtilCmd extends CommandBase {
                         } if (setting instanceof SettingString) {
                             if (args.length == 3)
                                 clientMessage(setting.name + Utilrun.highlight(" = ") + "\"" + setting.string().value + "\"");
-                            else setting.string().value = args[3];
+                            else setting.string().setValue(args[3]);
                         } if (setting instanceof SettingBool) {
                             if (args.length == 3)
                                 clientMessage(setting.name + Utilrun.highlight(" = ") + setting.bool().value);
                             else {
                                 if (args[3].equalsIgnoreCase("true") || args[3].equalsIgnoreCase("false"))
-                                    setting.bool().value = Boolean.parseBoolean(args[3]);
+                                    setting.bool().setValue(Boolean.parseBoolean(args[3]));
                                 else if (args[3].equalsIgnoreCase("toggle"))
-                                    setting.bool().value = !setting.bool().value;
+                                    setting.bool().setValue(!setting.bool().value);
                             }
                         }
                     }

@@ -1,6 +1,9 @@
 package zimnycat.utilrun.base.settings;
 
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.text.Text;
 import zimnycat.utilrun.base.SettingBase;
+import zimnycat.utilrun.base.Utilrun;
 
 public class SettingNum extends SettingBase {
     public double value;
@@ -17,4 +20,11 @@ public class SettingNum extends SettingBase {
     public double getMin() { return min; }
 
     public double getMax() { return max; }
+
+    public void setValue(double value) {
+        this.value = value;
+        MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(Text.of(
+                Utilrun.highlight(">> ") + name + Utilrun.highlight(" = ") + value
+        ));
+    }
 }

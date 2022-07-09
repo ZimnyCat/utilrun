@@ -81,10 +81,10 @@ public class Manager {
 
         if (msg.equals(Utilrun.prefix)) {
             mc.inGameHud.getChatHud().addMessage(Text.of(
-                    "Commands (" + Utilrun.highlight(String.valueOf(Manager.commands.size())) + "):"
+                    Utilrun.highlight(">> ") + "Commands (" + Utilrun.highlight(String.valueOf(Manager.commands.size())) + "):"
             ));
             Manager.commands.forEach(c -> mc.inGameHud.getChatHud().addMessage(Text.of(
-                    c.getName() + Utilrun.highlight(" - ") + c.getDesc()
+                    Utilrun.highlight(">> ") + c.getName() + Utilrun.highlight(" - ") + c.getDesc()
             )));
             return;
         }
