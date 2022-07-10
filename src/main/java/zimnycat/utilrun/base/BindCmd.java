@@ -12,7 +12,7 @@ public class BindCmd extends CommandBase {
     @Override
     public void run(String[] args) {
         if (args.length <= 1) {
-            clientMessage("Syntax: \"" + Utilrun.highlight("bind <key> <client command/clear>") + "\"");
+            clientMessage("Syntax: \"" + Utilrun.highlight("bind <key> <add/clear/get>") + "\"");
             return;
         }
 
@@ -32,26 +32,33 @@ public class BindCmd extends CommandBase {
         FileLib.read("binds.json").forEach(sb::append);
         JsonObject data = JsonParser.parseString(sb.toString()).getAsJsonObject();
 
-        if (args[1].equalsIgnoreCase("clear")) {
-            data.remove(code);
-            FileLib.write("binds.json", gson.toJson(data), FileLib.WriteMode.OVERWRITE);
-            clientMessage("Cleared " + Utilrun.highlight(args[0] + " (" + code + ")"));
-            return;
+        switch (args[1]) {
+            case "add" -> {
+                StringBuilder builder = new StringBuilder();
+                for (String s : args) if (Arrays.asList(args).indexOf(s) > 1) builder.append(" " + s);
+
+                if (!data.has(code)) {
+                    JsonArray array = new JsonArray();
+                    array.add(builder.substring(1));
+                    data.add(code, array);
+                }
+                else data.get(code).getAsJsonArray().add(builder.substring(1));
+
+                FileLib.write("binds.json", gson.toJson(data), FileLib.WriteMode.OVERWRITE);
+                clientMessage(
+                        "Bound " + Utilrun.highlight("\"" + builder.substring(1) + "\"") + " to " + Utilrun.highlight(args[0] + " (" + code + ")")
+                );
+            } case "clear" -> {
+                data.remove(code);
+                FileLib.write("binds.json", gson.toJson(data), FileLib.WriteMode.OVERWRITE);
+                clientMessage("Cleared " + Utilrun.highlight(args[0] + " (" + code + ")"));
+            } case "get" -> {
+                if (data.has(code)) {
+                    clientMessage("Command(s) bound to " + Utilrun.highlight(args[0] + " (" + code + ")" + ":"));
+                    data.get(code).getAsJsonArray().forEach(element -> clientMessage(element.getAsString()));
+                }
+                else clientMessage("No commands bound to " + Utilrun.highlight(args[0] + " (" + code + ")"));
+            }
         }
-
-        StringBuilder builder = new StringBuilder();
-        for (String s : args) if (Arrays.asList(args).indexOf(s) != 0) builder.append(" " + s);
-
-        if (!data.has(code)) {
-            JsonArray array = new JsonArray();
-            array.add(builder.substring(1));
-            data.add(code, array);
-        }
-        else data.get(code).getAsJsonArray().add(builder.substring(1));
-
-        FileLib.write("binds.json", gson.toJson(data), FileLib.WriteMode.OVERWRITE);
-        clientMessage(
-                "Bound " + Utilrun.highlight("\"" + builder.substring(1) + "\"") + " to " + Utilrun.highlight(args[0] + " (" + code + ")")
-        );
     }
 }
