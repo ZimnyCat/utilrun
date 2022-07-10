@@ -36,6 +36,10 @@ public class BindCmd extends CommandBase {
             case "add" -> {
                 StringBuilder builder = new StringBuilder();
                 for (String s : args) if (Arrays.asList(args).indexOf(s) > 1) builder.append(" " + s);
+                if (builder.length() == 0) {
+                    clientMessage("Syntax: \"" + Utilrun.highlight("bind <key> <add> <" + Utilrun.name + " command>") + "\"");
+                    return;
+                }
 
                 if (!data.has(code)) {
                     JsonArray array = new JsonArray();
