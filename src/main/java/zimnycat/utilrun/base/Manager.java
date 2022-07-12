@@ -5,6 +5,7 @@ import com.google.gson.*;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.network.packet.c2s.play.ChatMessageC2SPacket;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import org.apache.commons.lang3.ArrayUtils;
 import org.reflections.Reflections;
 import zimnycat.utilrun.base.settings.SettingBool;
@@ -127,6 +128,8 @@ public class Manager {
         String[] split = cmd.split(" ");
         commands.forEach(c -> {
             if (c.getName().equals(split[0])) {
+                mc.inGameHud.getChatHud().addMessage(Text.of(Formatting.GRAY + cmd));
+
                 try { c.run(ArrayUtils.remove(split, 0)); }
                 catch (Exception e) {
                     c.clientMessage("Exception caught! Check logs for more info.");
