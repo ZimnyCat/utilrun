@@ -2,7 +2,7 @@ package zimnycat.utilrun.base;
 
 import com.google.gson.*;
 import net.minecraft.client.util.InputUtil;
-import zimnycat.utilrun.libs.FileLib;
+import zimnycat.utilrun.libs.ModFile;
 
 import java.util.Arrays;
 
@@ -22,14 +22,12 @@ public class BindCmd extends CommandBase {
         } catch (Exception e) { clientMessage("Invalid key"); }
         if (code == null) return;
 
-        if (!FileLib.path.resolve("binds.json").toFile().exists()) {
-            FileLib.createFile("binds.json");
-            FileLib.write("binds.json", "{}", FileLib.WriteMode.OVERWRITE);
-        }
+        ModFile modFile = new ModFile("binds.json");
+        if (modFile.read().isEmpty()) modFile.write("{}", ModFile.WriteMode.OVERWRITE);
 
         StringBuilder sb = new StringBuilder();
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        FileLib.read("binds.json").forEach(sb::append);
+        modFile.read().forEach(sb::append);
         JsonObject data = JsonParser.parseString(sb.toString()).getAsJsonObject();
 
         switch (args[1]) {
@@ -48,13 +46,13 @@ public class BindCmd extends CommandBase {
                 }
                 else data.get(code).getAsJsonArray().add(builder.substring(1));
 
-                FileLib.write("binds.json", gson.toJson(data), FileLib.WriteMode.OVERWRITE);
+                modFile.write(gson.toJson(data), ModFile.WriteMode.OVERWRITE);
                 clientMessage(
                         "Bound " + Utilrun.highlight("\"" + builder.substring(1) + "\"") + " to " + Utilrun.highlight(args[0] + " (" + code + ")")
                 );
             } case "clear" -> {
                 data.remove(code);
-                FileLib.write("binds.json", gson.toJson(data), FileLib.WriteMode.OVERWRITE);
+                modFile.write(gson.toJson(data), ModFile.WriteMode.OVERWRITE);
                 clientMessage("Cleared " + Utilrun.highlight(args[0] + " (" + code + ")"));
             } case "get" -> {
                 if (data.has(code)) {

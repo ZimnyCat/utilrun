@@ -14,7 +14,7 @@ import zimnycat.utilrun.base.settings.SettingString;
 import zimnycat.utilrun.events.ClientStopEvent;
 import zimnycat.utilrun.events.KeyPressEvent;
 import zimnycat.utilrun.events.SendPacketEvent;
-import zimnycat.utilrun.libs.FileLib;
+import zimnycat.utilrun.libs.ModFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,27 +49,25 @@ public class Manager {
         });
 
         Utilrun.logger.info("Loading settings");
-        try {
-            StringBuilder sb = new StringBuilder();
-            FileLib.read("settings.json").forEach(sb::append);
-            JsonObject data = JsonParser.parseString(sb.toString()).getAsJsonObject();
+        StringBuilder sb = new StringBuilder();
+        ModFile modFile = new ModFile("settings.json");
 
-            utils.forEach(u -> {
-                JsonElement je = data.get(u.getName().toLowerCase());
-                if (je != null) {
-                    u.getSettings().forEach(s -> {
-                        JsonElement val = je.getAsJsonObject().get(s.name.toLowerCase());
-                        if (val != null) {
-                            if (s instanceof SettingNum) s.num().value = val.getAsDouble();
-                            if (s instanceof SettingString) s.string().value = val.getAsString();
-                            if (s instanceof SettingBool) s.bool().value = val.getAsBoolean();
-                        }
-                    });
-                }
-            });
-        } catch (Exception e) {
-            FileLib.createFile("settings.json");
-        }
+        modFile.read().forEach(sb::append);
+        JsonObject data = JsonParser.parseString(sb.toString()).getAsJsonObject();
+
+        utils.forEach(u -> {
+            JsonElement je = data.get(u.getName().toLowerCase());
+            if (je != null) {
+                u.getSettings().forEach(s -> {
+                    JsonElement val = je.getAsJsonObject().get(s.name.toLowerCase());
+                    if (val != null) {
+                        if (s instanceof SettingNum) s.num().value = val.getAsDouble();
+                        if (s instanceof SettingString) s.string().value = val.getAsString();
+                        if (s instanceof SettingBool) s.bool().value = val.getAsBoolean();
+                    }
+                });
+            }
+        });
     }
 
     @Subscribe
@@ -109,16 +107,17 @@ public class Manager {
             }
         });
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        FileLib.write("settings.json", gson.toJson(data), FileLib.WriteMode.OVERWRITE);
+        ModFile modFile = new ModFile("settings.json");
+        modFile.write(gson.toJson(data), ModFile.WriteMode.OVERWRITE);
     }
 
     @Subscribe
     public void keyPress(KeyPressEvent event) {
-        if (!FileLib.path.resolve("binds.json").toFile().exists()) return;
-
+        ModFile modFile = new ModFile("binds.json");
         String key = String.valueOf(event.getKey());
         StringBuilder sb = new StringBuilder();
-        FileLib.read("binds.json").forEach(sb::append);
+
+        modFile.read().forEach(sb::append);
         JsonArray array = JsonParser.parseString(sb.toString()).getAsJsonObject().getAsJsonArray(key);
 
         if (array != null) array.forEach(element -> runCommand(element.getAsString()));
