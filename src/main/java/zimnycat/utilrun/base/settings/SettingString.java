@@ -16,7 +16,7 @@ public class SettingString extends SettingBase {
     public void setValue(String value) {
         this.value = value;
         MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(Text.of(
-                Utilrun.highlight(">> ") + name + Utilrun.highlight(" = ") + value
+                Utilrun.highlight(">> ") + name + Utilrun.highlight(" = ") + "\"" + value + "\""
         ));
     }
 }
