@@ -23,12 +23,10 @@ public class BindCmd extends CommandBase {
         if (code == null) return;
 
         ModFile modFile = new ModFile("binds.json");
-        if (modFile.read().isEmpty()) modFile.write("{}", ModFile.WriteMode.OVERWRITE);
+        if (modFile.readAsList().isEmpty()) modFile.write("{}", ModFile.WriteMode.OVERWRITE);
 
-        StringBuilder sb = new StringBuilder();
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        modFile.read().forEach(sb::append);
-        JsonObject data = JsonParser.parseString(sb.toString()).getAsJsonObject();
+        JsonObject data = JsonParser.parseString(modFile.readAsString()).getAsJsonObject();
 
         switch (args[1]) {
             case "add" -> {

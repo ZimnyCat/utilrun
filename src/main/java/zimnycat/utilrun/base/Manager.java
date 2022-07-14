@@ -49,11 +49,9 @@ public class Manager {
         });
 
         Utilrun.logger.info("Loading settings");
-        StringBuilder sb = new StringBuilder();
         ModFile modFile = new ModFile("settings.json");
-
-        modFile.read().forEach(sb::append);
-        JsonObject data = JsonParser.parseString(sb.toString()).getAsJsonObject();
+        if (modFile.readAsList().isEmpty()) modFile.write("{}", ModFile.WriteMode.OVERWRITE);
+        JsonObject data = JsonParser.parseString(modFile.readAsString()).getAsJsonObject();
 
         utils.forEach(u -> {
             JsonElement je = data.get(u.getName().toLowerCase());
@@ -114,11 +112,9 @@ public class Manager {
     @Subscribe
     public void keyPress(KeyPressEvent event) {
         ModFile modFile = new ModFile("binds.json");
+        if (modFile.readAsList().isEmpty()) modFile.write("{}", ModFile.WriteMode.OVERWRITE);
         String key = String.valueOf(event.getKey());
-        StringBuilder sb = new StringBuilder();
-
-        modFile.read().forEach(sb::append);
-        JsonArray array = JsonParser.parseString(sb.toString()).getAsJsonObject().getAsJsonArray(key);
+        JsonArray array = JsonParser.parseString(modFile.readAsString()).getAsJsonObject().getAsJsonArray(key);
 
         if (array != null) array.forEach(element -> runCommand(element.getAsString()));
     }

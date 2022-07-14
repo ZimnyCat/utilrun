@@ -20,13 +20,24 @@ public class ModFile {
         }
     }
 
-    public List<String> read() {
+    public List<String> readAsList() {
         try {
             return Files.readAllLines(path);
         } catch (Exception e) {
             e.printStackTrace();
         }
         return new ArrayList<>();
+    }
+
+    public String readAsString() {
+        try {
+            StringBuilder builder = new StringBuilder();
+            Files.readAllLines(path).forEach(builder::append);
+            return builder.toString();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 
     public void write(String content, WriteMode mode) {
