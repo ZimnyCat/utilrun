@@ -65,7 +65,16 @@ public class UtilCmd extends CommandBase {
                                 clientMessage(setting.name + Utilrun.highlight(" = ") + setting.num().value);
                             else {
                                 try {
-                                    double val = Double.parseDouble(args[3]);
+                                    double val;
+                                    if (args[3].startsWith("+"))
+                                        val = setting.num().value + Double.parseDouble(args[3].substring(1));
+                                    else if (args[3].startsWith("-"))
+                                        val = setting.num().value - Double.parseDouble(args[3].substring(1));
+                                    else if (args[3].startsWith("*"))
+                                        val = setting.num().value * Double.parseDouble(args[3].substring(1));
+                                    else if (args[3].startsWith("/"))
+                                        val = setting.num().value / Double.parseDouble(args[3].substring(1));
+                                    else val = Double.parseDouble(args[3]);
                                     if (isValid(setting.num(), val) || (args.length == 5 && args[4].equalsIgnoreCase("force")))
                                         setting.num().setValue(val);
                                     else clientMessage("Invalid value");
