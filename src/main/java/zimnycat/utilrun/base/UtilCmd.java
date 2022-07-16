@@ -62,7 +62,8 @@ public class UtilCmd extends CommandBase {
                     SettingBase setting = util.setting(args[2]);
                     if (setting instanceof SettingNum) {
                         if (args.length == 3)
-                            clientMessage(setting.name + Utilrun.highlight(" = ") + setting.num().value);
+                            clientMessage(setting.name + Utilrun.highlight(" = ") + setting.num().value
+                                    + " (" + setting.num().getMin() + Utilrun.highlight("-") + setting.num().getMax() + ")");
                         else {
                             try {
                                 double val;
