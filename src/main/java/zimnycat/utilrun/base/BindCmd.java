@@ -12,7 +12,7 @@ public class BindCmd extends CommandBase {
     @Override
     public void run(String[] args) {
         if (args.length <= 1) {
-            clientMessage("Syntax: \"" + Utilrun.highlight("bind <key> <add/clear/get>") + "\"");
+            clientMessage("Syntax: \"" + Utilrun.highlight("bind <key> add/clear/get") + "\"");
             return;
         }
 
