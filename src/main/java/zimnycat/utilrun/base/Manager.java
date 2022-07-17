@@ -27,8 +27,6 @@ public class Manager {
 
     public void init() {
         Utilrun.logger.info("Loading commands");
-        commands.add(new UtilCmd());
-        commands.add(new BindCmd());
         Reflections ref = new Reflections(this.getClass().getPackage().getName().replace("base", "commands"));
         ref.getSubTypesOf(CommandBase.class).forEach(clazz -> {
             try {
@@ -37,6 +35,8 @@ public class Manager {
                 Utilrun.logger.info("Failed to load " + clazz.getSimpleName());
             }
         });
+        commands.add(new UtilCmd());
+        commands.add(new BindCmd());
 
         Utilrun.logger.info("Loading utils");
         ref = new Reflections(this.getClass().getPackage().getName().replace("base", "utils"));

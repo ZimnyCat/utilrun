@@ -25,7 +25,7 @@ public class SettingNum extends SettingBase {
         this.value = value;
         MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(Text.of(
                 Utilrun.highlight(">> ") + name + Utilrun.highlight(" = ") + value
-                        + " (" + getMin() + Utilrun.highlight("-") + getMax() + ")"
+                        + " (" + min + Utilrun.highlight("-") + max + ")"
         ));
     }
 }

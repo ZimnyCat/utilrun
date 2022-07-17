@@ -12,7 +12,7 @@ public class BindCmd extends CommandBase {
     @Override
     public void run(String[] args) {
         if (args.length <= 1) {
-            clientMessage("Syntax: \"" + Utilrun.highlight("bind <key> add/clear/get") + "\"");
+            clientMessage("Syntax: \"" + Utilrun.highlight("bind <key> add/clear/list") + "\"");
             return;
         }
 
@@ -52,7 +52,7 @@ public class BindCmd extends CommandBase {
                 data.remove(code);
                 modFile.write(gson.toJson(data), ModFile.WriteMode.OVERWRITE);
                 clientMessage("Cleared " + Utilrun.highlight(args[0] + " (" + code + ")"));
-            } case "get" -> {
+            } case "list" -> {
                 if (data.has(code)) {
                     clientMessage("Command(s) bound to " + Utilrun.highlight(args[0] + " (" + code + ")" + ":"));
                     data.get(code).getAsJsonArray().forEach(element -> clientMessage(element.getAsString()));
