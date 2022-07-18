@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class UtilBase {
-    static MinecraftClient mc = MinecraftClient.getInstance();
+    public MinecraftClient mc = MinecraftClient.getInstance();
 
     private final String name;
     private final String desc;

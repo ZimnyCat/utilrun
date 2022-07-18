@@ -4,7 +4,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
 
 public class CommandBase {
-    static MinecraftClient mc = MinecraftClient.getInstance();
+    public MinecraftClient mc = MinecraftClient.getInstance();
 
     private final String name;
     private final String desc;
