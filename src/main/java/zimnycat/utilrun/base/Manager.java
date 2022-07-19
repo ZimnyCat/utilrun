@@ -48,14 +48,15 @@ public class Manager {
             }
         });
 
-        Utilrun.logger.info("Loading settings");
-        ModFile modFile = new ModFile("settings.json");
+        Utilrun.logger.info("Loading utils data");
+        ModFile modFile = new ModFile("utils.json");
         if (modFile.readAsList().isEmpty()) modFile.write("{}", ModFile.WriteMode.OVERWRITE);
         JsonObject data = JsonParser.parseString(modFile.readAsString()).getAsJsonObject();
 
         utils.forEach(u -> {
             JsonElement je = data.get(u.getName().toLowerCase());
             if (je != null) {
+                u.setEnabled(je.getAsJsonObject().get("enabled").getAsBoolean());
                 u.getSettings().forEach(s -> {
                     JsonElement val = je.getAsJsonObject().get(s.name.toLowerCase());
                     if (val != null) {
@@ -90,22 +91,23 @@ public class Manager {
     }
 
     @Subscribe
-    public void saveSettings(ClientStopEvent event) {
-        Utilrun.logger.info("Saving settings");
+    public void saveUtilsData(ClientStopEvent event) {
+        Utilrun.logger.info("Saving utils data");
         JsonObject data = new JsonObject();
         Manager.utils.forEach(u -> {
+            JsonObject util = new JsonObject();
+            util.addProperty("enabled", u.isEnabled());
             if (!u.getSettings().isEmpty()) {
-                JsonObject settings = new JsonObject();
                 u.getSettings().forEach(s -> {
-                    if (s instanceof SettingNum) settings.addProperty(s.name.toLowerCase(), s.num().value);
-                    if (s instanceof SettingString) settings.addProperty(s.name.toLowerCase(), s.string().value);
-                    if (s instanceof SettingBool) settings.addProperty(s.name.toLowerCase(), s.bool().value);
+                    if (s instanceof SettingNum) util.addProperty(s.name.toLowerCase(), s.num().value);
+                    if (s instanceof SettingString) util.addProperty(s.name.toLowerCase(), s.string().value);
+                    if (s instanceof SettingBool) util.addProperty(s.name.toLowerCase(), s.bool().value);
                 });
-                data.add(u.getName().toLowerCase(), settings);
             }
+            data.add(u.getName().toLowerCase(), util);
         });
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        ModFile modFile = new ModFile("settings.json");
+        ModFile modFile = new ModFile("utils.json");
         modFile.write(gson.toJson(data), ModFile.WriteMode.OVERWRITE);
     }
 
