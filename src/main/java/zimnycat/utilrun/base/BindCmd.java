@@ -33,7 +33,7 @@ public class BindCmd extends CommandBase {
                 StringBuilder builder = new StringBuilder();
                 for (String s : args) if (Arrays.asList(args).indexOf(s) > 1) builder.append(" " + s);
                 if (builder.length() == 0) {
-                    clientMessage("Syntax: \"" + Utilrun.highlight("bind <key> <add> <" + Utilrun.name + " command>") + "\"");
+                    clientMessage("Syntax: \"" + Utilrun.highlight("bind <key> add <" + Utilrun.name + " command>") + "\"");
                     return;
                 }
 

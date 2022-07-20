@@ -36,7 +36,7 @@ public class UtilCmd extends CommandBase {
             }
             case "settings" -> {
                 if (args.length == 1) {
-                    clientMessage("Syntax: \"" + Utilrun.highlight("util settings <module> <setting name> <value>") + "\"");
+                    clientMessage("Syntax: \"" + Utilrun.highlight("util settings <util> <setting name> <value>") + "\"");
                     return;
                 }
                 UtilBase util = Manager.getUtilByName(args[1]);
