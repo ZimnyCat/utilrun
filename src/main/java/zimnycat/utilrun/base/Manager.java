@@ -56,7 +56,7 @@ public class Manager {
         utils.forEach(u -> {
             JsonElement je = data.get(u.getName().toLowerCase());
             if (je != null) {
-                u.setEnabled(je.getAsJsonObject().get("enabled").getAsBoolean());
+                if (je.getAsJsonObject().get("enabled").getAsBoolean()) u.setEnabled(true);
                 u.getSettings().forEach(s -> {
                     JsonElement val = je.getAsJsonObject().get(s.name.toLowerCase());
                     if (val != null) {
