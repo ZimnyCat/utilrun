@@ -6,6 +6,8 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.util.Formatting;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import zimnycat.utilrun.commands.ExampleCmd;
+import zimnycat.utilrun.utils.ExampleUtil;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -25,9 +27,12 @@ public class Utilrun implements ModInitializer {
 			path.toFile().mkdirs();
 		}
 
-		Manager manager = new Manager();
-		manager.init();
-		bus.register(manager);
+		Manager.commands.add(new ExampleCmd());
+
+		Manager.utils.add(new ExampleUtil());
+
+		Manager.loadData();
+		bus.register(new Manager());
 	}
 
 	public static String highlight(String str) { return Formatting.GREEN + str + Formatting.WHITE; }

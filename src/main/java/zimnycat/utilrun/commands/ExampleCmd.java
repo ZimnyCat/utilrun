@@ -12,8 +12,6 @@ public class ExampleCmd extends CommandBase {
             return;
         }
 
-        StringBuilder message = new StringBuilder();
-        for (String element : args) message.append(element + " ");
-        clientMessage(message.toString());
+        clientMessage(String.join(" ", args));
     }
 }
