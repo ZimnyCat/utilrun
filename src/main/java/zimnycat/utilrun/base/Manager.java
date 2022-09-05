@@ -25,6 +25,7 @@ public class Manager {
     public static List<UtilBase> utils = new ArrayList<>();
 
     public static void loadData() {
+        commands.add(new AliasCmd());
         commands.add(new BindCmd());
         commands.add(new UtilCmd());
 
@@ -66,6 +67,16 @@ public class Manager {
             )));
             return;
         }
+
+        ModFile modFile = new ModFile("aliases.json");
+        JsonObject aliases = JsonParser.parseString(modFile.readAsString()).getAsJsonObject();
+
+        aliases.entrySet().forEach(alias -> {
+            if (alias.getKey().equals(msg.replace(Utilrun.prefix, ""))) {
+                runCommand(alias.getValue().getAsString());
+                return;
+            }
+        });
 
         runCommand(msg.replace(Utilrun.prefix, ""));
     }
