@@ -68,17 +68,16 @@ public class Manager {
             return;
         }
 
+        String[] split = msg.replace(Utilrun.prefix, "").split(" ");
+
         ModFile modFile = new ModFile("aliases.json");
         JsonObject aliases = JsonParser.parseString(modFile.readAsString()).getAsJsonObject();
 
         aliases.entrySet().forEach(alias -> {
-            if (alias.getKey().equals(msg.replace(Utilrun.prefix, ""))) {
-                runCommand(alias.getValue().getAsString());
-                return;
-            }
+            if (split[0].equals(alias.getKey())) split[0] = alias.getValue().getAsString();
         });
 
-        runCommand(msg.replace(Utilrun.prefix, ""));
+        runCommand(String.join(" ", split));
     }
 
     @Subscribe
