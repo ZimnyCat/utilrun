@@ -45,7 +45,7 @@ public class AliasCmd extends CommandBase {
 
                 data.addProperty(args[1], command.substring(1));
                 modFile.write(gson.toJson(data), ModFile.WriteMode.OVERWRITE);
-                clientMessage("Added \"" + args[1] + "\" alias");
+                clientMessage("Added \"" + Utilrun.highlight(args[1]) + "\" alias");
             }
             case "remove" -> {
                 if (args.length == 1) {
@@ -55,7 +55,7 @@ public class AliasCmd extends CommandBase {
 
                 data.remove(args[1]);
                 modFile.write(gson.toJson(data), ModFile.WriteMode.OVERWRITE);
-                clientMessage("Removed \"" + args[1] + "\" alias");
+                clientMessage("Removed \"" + Utilrun.highlight(args[1]) + "\" alias");
             }
             case "list" -> {
                 clientMessage("Aliases:");
