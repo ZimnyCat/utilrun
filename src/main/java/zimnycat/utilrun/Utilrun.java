@@ -1,4 +1,4 @@
-package zimnycat.utilrun.base;
+package zimnycat.utilrun;
 
 import com.google.common.eventbus.EventBus;
 import net.fabricmc.api.ModInitializer;
@@ -6,6 +6,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.util.Formatting;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import zimnycat.utilrun.base.Manager;
 import zimnycat.utilrun.commands.ExampleCmd;
 import zimnycat.utilrun.utils.ExampleUtil;
 

@@ -1,7 +1,7 @@
 package zimnycat.utilrun.commands;
 
 import zimnycat.utilrun.base.CommandBase;
-import zimnycat.utilrun.base.Utilrun;
+import zimnycat.utilrun.Utilrun;
 
 public class ExampleCmd extends CommandBase {
     public ExampleCmd() { super("example", "Print a message"); }

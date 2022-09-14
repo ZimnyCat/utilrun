@@ -19,7 +19,7 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "zimnycat.utilrun.base.Utilrun"
+      "zimnycat.utilrun.Utilrun"
     ]
   },
   "mixins": [

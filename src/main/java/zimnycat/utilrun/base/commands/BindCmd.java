@@ -1,7 +1,9 @@
-package zimnycat.utilrun.base;
+package zimnycat.utilrun.base.commands;
 
 import com.google.gson.*;
 import net.minecraft.client.util.InputUtil;
+import zimnycat.utilrun.Utilrun;
+import zimnycat.utilrun.base.CommandBase;
 import zimnycat.utilrun.libs.ModFile;
 
 import java.util.Arrays;

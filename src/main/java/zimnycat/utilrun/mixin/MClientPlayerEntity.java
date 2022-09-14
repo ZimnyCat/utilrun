@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import zimnycat.utilrun.base.Utilrun;
+import zimnycat.utilrun.Utilrun;
 import zimnycat.utilrun.events.TickEvent;
 
 @Mixin(ClientPlayerEntity.class)

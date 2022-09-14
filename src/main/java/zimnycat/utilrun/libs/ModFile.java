@@ -1,14 +1,12 @@
 package zimnycat.utilrun.libs;
 
-import zimnycat.utilrun.base.Utilrun;
+import zimnycat.utilrun.Utilrun;
 
 import java.io.FileWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class ModFile {
     private final Path path;

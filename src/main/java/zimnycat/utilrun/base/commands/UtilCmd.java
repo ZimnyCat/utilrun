@@ -1,5 +1,10 @@
-package zimnycat.utilrun.base;
+package zimnycat.utilrun.base.commands;
 
+import zimnycat.utilrun.Utilrun;
+import zimnycat.utilrun.base.CommandBase;
+import zimnycat.utilrun.base.Manager;
+import zimnycat.utilrun.base.SettingBase;
+import zimnycat.utilrun.base.UtilBase;
 import zimnycat.utilrun.base.settings.SettingBool;
 import zimnycat.utilrun.base.settings.SettingNum;
 import zimnycat.utilrun.base.settings.SettingString;

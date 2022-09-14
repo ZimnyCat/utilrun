@@ -3,7 +3,7 @@ package zimnycat.utilrun.base.settings;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
 import zimnycat.utilrun.base.SettingBase;
-import zimnycat.utilrun.base.Utilrun;
+import zimnycat.utilrun.Utilrun;
 
 public class SettingBool extends SettingBase {
     public boolean value;
