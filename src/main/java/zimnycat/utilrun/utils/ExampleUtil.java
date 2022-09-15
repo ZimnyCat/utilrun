@@ -14,13 +14,14 @@ public class ExampleUtil extends UtilBase {
         super("Example", "Prints messages",
                 new SettingNum("delay", 40, 10, 100),
                 new SettingString("msg", "test"),
-                new SettingBool("dot", true));
+                new SettingBool("jump", true));
     }
 
     @Subscribe
     public void onTick(TickEvent event) {
         if (ticks > setting("delay").num().value) {
-            clientMessage(setting("msg").string().value + (setting("dot").bool().value ? "." : ""));
+            clientMessage(setting("msg").string().value);
+            if (setting("jump").bool().value) mc.player.jump();
             ticks = 0;
         } else ticks++;
     }
