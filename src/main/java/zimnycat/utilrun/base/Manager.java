@@ -117,17 +117,7 @@ public class Manager {
 
     public static void runCommand(String cmd) {
         String[] split = cmd.split(" ");
-        commands.forEach(c -> {
-            if (c.getName().equals(split[0])) {
-                mc.inGameHud.getChatHud().addMessage(Text.of(Formatting.GRAY + cmd));
-
-                try { c.run(ArrayUtils.remove(split, 0)); }
-                catch (Exception e) {
-                    c.clientMessage("Exception caught! Check logs for more info.");
-                    e.printStackTrace();
-                }
-            }
-        });
+        commands.stream().filter(command -> command.getName().startsWith(split[0])).toList().get(0).run(ArrayUtils.remove(split, 0));
     }
 
     public static UtilBase getUtilByName(String uName) {
