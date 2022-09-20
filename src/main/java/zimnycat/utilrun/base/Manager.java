@@ -116,12 +116,22 @@ public class Manager {
     }
 
     public static void runCommand(String cmd) {
+        mc.inGameHud.getChatHud().addMessage(Text.of(Formatting.GRAY + cmd));
         String[] split = cmd.split(" ");
-        commands.stream().filter(command -> command.getName().startsWith(split[0])).toList().get(0).run(ArrayUtils.remove(split, 0));
+        try {
+            commands.stream().filter(command -> command.getName().startsWith(split[0])).toList().get(0).run(ArrayUtils.remove(split, 0));
+        } catch (ArrayIndexOutOfBoundsException uwu) {
+            mc.inGameHud.getChatHud().addMessage(Text.of(Utilrun.highlight(">> ") + "No such command! Try " + Utilrun.highlight(Utilrun.prefix)));
+        } catch (Exception e) {
+            mc.inGameHud.getChatHud().addMessage(Text.of(Utilrun.highlight(">> ") + "Exception caught! Check logs for more info."));
+        }
     }
 
     public static UtilBase getUtilByName(String uName) {
-        for (UtilBase util : utils) if (util.getName().equalsIgnoreCase(uName)) return util;
-        return null;
+        try {
+            return utils.stream().filter(util -> util.getName().toLowerCase().startsWith(uName.toLowerCase())).toList().get(0);
+        } catch (Exception e) {
+            return null;
+        }
     }
 }

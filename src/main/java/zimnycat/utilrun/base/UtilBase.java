@@ -6,7 +6,6 @@ import zimnycat.utilrun.Utilrun;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 public class UtilBase {
     public MinecraftClient mc = MinecraftClient.getInstance();
@@ -59,7 +58,10 @@ public class UtilBase {
     }
 
     public SettingBase setting(String name) {
-        for (SettingBase setting : settings) if (Objects.equals(setting.name.toLowerCase(), name.toLowerCase())) return setting;
-        return null;
+        try {
+            return settings.stream().filter(setting -> setting.name.toLowerCase().startsWith(name.toLowerCase())).toList().get(0);
+        } catch (Exception e) {
+            return null;
+        }
     }
 }
