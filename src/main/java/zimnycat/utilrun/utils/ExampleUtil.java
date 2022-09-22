@@ -11,10 +11,12 @@ public class ExampleUtil extends UtilBase {
     int ticks = 0;
 
     public ExampleUtil() {
-        super("Example", "Prints messages",
+        super(
+                "Example", "Prints messages",
                 new SettingNum("delay", 40, 10, 100),
                 new SettingString("msg", "test"),
-                new SettingBool("jump", true));
+                new SettingBool("jump", true)
+        );
     }
 
     @Subscribe
