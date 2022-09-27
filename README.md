@@ -1,6 +1,6 @@
 # utilrun
 ### Minecraft utility mod engine
-### Fabric 1.19.1
+### Fabric 1.19.2
 ### Default command prefix: ```>>```
 
 ## How to:
