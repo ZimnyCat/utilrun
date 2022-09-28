@@ -54,6 +54,8 @@ public class UtilCmd extends CommandBase {
                         clientMessage(util.getName() + " has no settings");
                         return;
                     }
+
+                    clientMessage(Utilrun.highlight(util.getName()) + " settings:");
                     for (SettingBase setting : util.getSettings()) {
                         if (setting instanceof SettingNum)
                             clientMessage(setting.name + Utilrun.highlight(" = ") + setting.num().value

@@ -75,6 +75,7 @@ public class Manager {
         String[] split = msg.replace(Utilrun.prefix, "").split(" ");
 
         ModFile modFile = new ModFile("aliases.json");
+        if (modFile.readAsList().isEmpty()) modFile.write("{}", ModFile.WriteMode.OVERWRITE);
         JsonObject aliases = JsonParser.parseString(modFile.readAsString()).getAsJsonObject();
 
         aliases.entrySet().forEach(alias -> {
