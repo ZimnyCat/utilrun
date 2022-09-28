@@ -58,10 +58,6 @@ public class UtilBase {
     }
 
     public SettingBase setting(String name) {
-        try {
-            return settings.stream().filter(setting -> setting.name.toLowerCase().startsWith(name.toLowerCase())).toList().get(0);
-        } catch (Exception e) {
-            return null;
-        }
+        return settings.stream().filter(setting -> setting.name.toLowerCase().startsWith(name.toLowerCase())).findFirst().orElse(null);
     }
 }

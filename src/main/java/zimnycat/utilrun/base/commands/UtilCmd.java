@@ -95,7 +95,7 @@ public class UtilCmd extends CommandBase {
                             clientMessage(setting.name + Utilrun.highlight(" = ") + "\"" + setting.string().value + "\"");
                         else {
                             StringBuilder builder = new StringBuilder();
-                            for (String s : args) if (Arrays.asList(args).indexOf(s) > 2) builder.append(" " + s);
+                            for (String s : args) if (Arrays.asList(args).indexOf(s) > 2) builder.append(" ").append(s);
                             setting.string().setValue(builder.substring(1));
                         }
                     } if (setting instanceof SettingBool) {

@@ -15,7 +15,7 @@ import zimnycat.utilrun.events.TickEvent;
 
 @Mixin(ClientPlayerEntity.class)
 public class MClientPlayerEntity extends AbstractClientPlayerEntity {
-    private static MinecraftClient mc = MinecraftClient.getInstance();
+    private static final MinecraftClient mc = MinecraftClient.getInstance();
 
     public MClientPlayerEntity(ClientWorld world, GameProfile profile, PlayerPublicKey key) {
         super(world, profile, key);
