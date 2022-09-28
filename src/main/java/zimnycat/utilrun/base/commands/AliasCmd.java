@@ -34,7 +34,7 @@ public class AliasCmd extends CommandBase {
                 }
 
                 StringBuilder command = new StringBuilder();
-                for (String s : args) if (Arrays.asList(args).indexOf(s) > 1) command.append(" " + s);
+                for (String s : args) if (Arrays.asList(args).indexOf(s) > 1) command.append(" ").append(s);
                 if (command.length() == 0) {
                     clientMessage("Syntax: \"" + Utilrun.highlight("alias add <alias> <" + Utilrun.name + " command>") + "\"");
                     return;

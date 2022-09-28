@@ -5,7 +5,7 @@ import net.minecraft.text.Text;
 import zimnycat.utilrun.Utilrun;
 
 public class CommandBase {
-    public MinecraftClient mc = MinecraftClient.getInstance();
+    static MinecraftClient mc = MinecraftClient.getInstance();
 
     private final String name;
     private final String desc;

@@ -6,7 +6,6 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.network.packet.c2s.play.ChatMessageC2SPacket;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
-import org.apache.commons.lang3.ArrayUtils;
 import zimnycat.utilrun.Utilrun;
 import zimnycat.utilrun.base.commands.AliasCmd;
 import zimnycat.utilrun.base.commands.BindCmd;
@@ -21,9 +20,11 @@ import zimnycat.utilrun.libs.ModFile;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class Manager {
     static MinecraftClient mc = MinecraftClient.getInstance();
+    static Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
     public static List<CommandBase> commands = new ArrayList<>();
     public static List<UtilBase> utils = new ArrayList<>();
@@ -92,16 +93,13 @@ public class Manager {
         utils.forEach(u -> {
             JsonObject util = new JsonObject();
             util.addProperty("enabled", u.isEnabled());
-            if (!u.getSettings().isEmpty()) {
-                u.getSettings().forEach(s -> {
-                    if (s instanceof SettingNum) util.addProperty(s.name.toLowerCase(), s.num().value);
-                    if (s instanceof SettingString) util.addProperty(s.name.toLowerCase(), s.string().value);
-                    if (s instanceof SettingBool) util.addProperty(s.name.toLowerCase(), s.bool().value);
-                });
-            }
+            u.getSettings().forEach(s -> {
+                if (s instanceof SettingNum) util.addProperty(s.name.toLowerCase(), s.num().value);
+                if (s instanceof SettingString) util.addProperty(s.name.toLowerCase(), s.string().value);
+                if (s instanceof SettingBool) util.addProperty(s.name.toLowerCase(), s.bool().value);
+            });
             data.add(u.getName().toLowerCase(), util);
         });
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
         ModFile modFile = new ModFile("utils.json");
         modFile.write(gson.toJson(data), ModFile.WriteMode.OVERWRITE);
     }
@@ -112,7 +110,6 @@ public class Manager {
         if (modFile.readAsList().isEmpty()) modFile.write("{}", ModFile.WriteMode.OVERWRITE);
         String key = String.valueOf(event.getKey());
         JsonArray array = JsonParser.parseString(modFile.readAsString()).getAsJsonObject().getAsJsonArray(key);
-
         if (array != null) array.forEach(element -> runCommand(element.getAsString()));
     }
 
@@ -120,19 +117,16 @@ public class Manager {
         mc.inGameHud.getChatHud().addMessage(Text.of(Formatting.GRAY + cmd));
         String[] split = cmd.split(" ");
         try {
-            commands.stream().filter(command -> command.getName().startsWith(split[0])).toList().get(0).run(ArrayUtils.remove(split, 0));
-        } catch (ArrayIndexOutOfBoundsException uwu) {
-            mc.inGameHud.getChatHud().addMessage(Text.of(Utilrun.highlight(">> ") + "No such command! Try " + Utilrun.highlight(Utilrun.prefix)));
+            Optional<CommandBase> c = commands.stream().filter(command -> command.getName().startsWith(split[0])).findFirst();
+            if (c.isPresent()) c.get().run(split);
+            else
+                mc.inGameHud.getChatHud().addMessage(Text.of(Utilrun.highlight(">> ") + "No such command! Try " + Utilrun.highlight(Utilrun.prefix)));
         } catch (Exception e) {
             mc.inGameHud.getChatHud().addMessage(Text.of(Utilrun.highlight(">> ") + "Exception caught! Check logs for more info."));
         }
     }
 
     public static UtilBase getUtilByName(String uName) {
-        try {
-            return utils.stream().filter(util -> util.getName().toLowerCase().startsWith(uName.toLowerCase())).toList().get(0);
-        } catch (Exception e) {
-            return null;
-        }
+        return utils.stream().filter(util -> util.getName().toLowerCase().startsWith(uName.toLowerCase())).findFirst().orElse(null);
     }
 }
