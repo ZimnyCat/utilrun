@@ -120,7 +120,7 @@ public class Manager {
             Optional<CommandBase> c = commands.stream().filter(command -> command.getName().startsWith(split[0])).findFirst();
             if (c.isPresent()) c.get().run(split);
             else
-                mc.inGameHud.getChatHud().addMessage(Text.of(Utilrun.highlight(">> ") + "No such command! Try " + Utilrun.highlight(Utilrun.prefix)));
+                mc.inGameHud.getChatHud().addMessage(Text.of(Utilrun.highlight(">> ") + "No such command! Try \"" + Utilrun.highlight(Utilrun.prefix) + "\""));
         } catch (Exception e) {
             mc.inGameHud.getChatHud().addMessage(Text.of(Utilrun.highlight(">> ") + "Exception caught! Check logs for more info."));
         }
