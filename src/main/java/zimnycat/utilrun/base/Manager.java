@@ -6,6 +6,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.network.packet.c2s.play.ChatMessageC2SPacket;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
+import org.apache.commons.lang3.ArrayUtils;
 import zimnycat.utilrun.Utilrun;
 import zimnycat.utilrun.base.commands.AliasCmd;
 import zimnycat.utilrun.base.commands.BindCmd;
@@ -118,7 +119,7 @@ public class Manager {
         String[] split = cmd.split(" ");
         try {
             Optional<CommandBase> c = commands.stream().filter(command -> command.getName().startsWith(split[0])).findFirst();
-            if (c.isPresent()) c.get().run(split);
+            if (c.isPresent()) c.get().run(ArrayUtils.remove(split, 0));
             else
                 mc.inGameHud.getChatHud().addMessage(Text.of(Utilrun.highlight(">> ") + "No such command! Try \"" + Utilrun.highlight(Utilrun.prefix) + "\""));
         } catch (Exception e) {

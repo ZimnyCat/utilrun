@@ -10,6 +10,7 @@ import zimnycat.utilrun.base.settings.SettingNum;
 import zimnycat.utilrun.base.settings.SettingString;
 
 import java.util.Arrays;
+import java.util.List;
 
 public class UtilCmd extends CommandBase {
     public UtilCmd() { super("util", "Manage utils"); }
@@ -35,9 +36,23 @@ public class UtilCmd extends CommandBase {
                 util.toggle();
             }
             case "list" -> {
-                clientMessage("Utils (" + Utilrun.highlight(String.valueOf(Manager.utils.size())) + "):");
-                Manager.utils.forEach(u -> clientMessage(u.getName() + Utilrun.highlight(" - ")
-                        + (u.isEnabled() ? "ON" : "OFF") +  Utilrun.highlight(" - ") + u.getDesc()));
+                if (args.length == 1) {
+                    clientMessage("Utils (" + Utilrun.highlight(String.valueOf(Manager.utils.size())) + "):");
+                    Manager.utils.forEach(u -> clientMessage(u.getName() + Utilrun.highlight(" - ")
+                            + (u.isEnabled() ? "ON" : "OFF") + Utilrun.highlight(" - ") + u.getDesc()));
+                    return;
+                }
+                if (args[1].equalsIgnoreCase("on")) {
+                    List<UtilBase> on = Manager.utils.stream().filter(UtilBase::isEnabled).toList();
+                    clientMessage("Utils (" + Utilrun.highlight(String.valueOf(on.size())) + "):");
+                    on.forEach(u -> clientMessage(u.getName() + Utilrun.highlight(" - ") + "ON"
+                            + Utilrun.highlight(" - ") + u.getDesc()));
+                } else if (args[1].equalsIgnoreCase("off")) {
+                    List<UtilBase> off = Manager.utils.stream().filter(u -> !u.isEnabled()).toList();
+                    clientMessage("Utils (" + Utilrun.highlight(String.valueOf(off.size())) + "):");
+                    off.forEach(u -> clientMessage(u.getName() + Utilrun.highlight(" - ") + "OFF"
+                            + Utilrun.highlight(" - ") + u.getDesc()));
+                }
             }
             case "settings" -> {
                 if (args.length == 1) {
