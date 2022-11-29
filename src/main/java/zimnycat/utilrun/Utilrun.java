@@ -32,7 +32,7 @@ public class Utilrun implements ModInitializer {
 
 		Manager.utils.add(new ExampleUtil());
 
-		Manager.loadData();
+		Manager.start();
 		bus.register(new Manager());
 	}
 

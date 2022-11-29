@@ -10,6 +10,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import zimnycat.utilrun.Utilrun;
 import zimnycat.utilrun.base.commands.AliasCmd;
 import zimnycat.utilrun.base.commands.BindCmd;
+import zimnycat.utilrun.base.commands.ConfigCmd;
 import zimnycat.utilrun.base.commands.UtilCmd;
 import zimnycat.utilrun.base.settings.SettingBool;
 import zimnycat.utilrun.base.settings.SettingNum;
@@ -30,30 +31,14 @@ public class Manager {
     public static List<CommandBase> commands = new ArrayList<>();
     public static List<UtilBase> utils = new ArrayList<>();
 
-    public static void loadData() {
+    public static String currentFile = "main.ur";
+
+    public static void start() {
         commands.add(new AliasCmd());
         commands.add(new BindCmd());
+        commands.add(new ConfigCmd());
         commands.add(new UtilCmd());
-
-        Utilrun.logger.info("Loading utils data");
-        ModFile modFile = new ModFile("utils.json");
-        if (modFile.readAsList().isEmpty()) modFile.write("{}", ModFile.WriteMode.OVERWRITE);
-        JsonObject data = JsonParser.parseString(modFile.readAsString()).getAsJsonObject();
-
-        utils.forEach(u -> {
-            JsonElement je = data.get(u.getName().toLowerCase());
-            if (je != null) {
-                if (je.getAsJsonObject().get("enabled").getAsBoolean()) u.setEnabled(true);
-                u.getSettings().forEach(s -> {
-                    JsonElement val = je.getAsJsonObject().get(s.name.toLowerCase());
-                    if (val != null) {
-                        if (s instanceof SettingNum) s.num().value = val.getAsDouble();
-                        if (s instanceof SettingString) s.string().value = val.getAsString();
-                        if (s instanceof SettingBool) s.bool().value = val.getAsBoolean();
-                    }
-                });
-            }
-        });
+        loadConfig(currentFile);
     }
 
     @Subscribe
@@ -88,22 +73,7 @@ public class Manager {
     }
 
     @Subscribe
-    public void saveUtilsData(ClientStopEvent event) {
-        Utilrun.logger.info("Saving utils data");
-        JsonObject data = new JsonObject();
-        utils.forEach(u -> {
-            JsonObject util = new JsonObject();
-            util.addProperty("enabled", u.isEnabled());
-            u.getSettings().forEach(s -> {
-                if (s instanceof SettingNum) util.addProperty(s.name.toLowerCase(), s.num().value);
-                if (s instanceof SettingString) util.addProperty(s.name.toLowerCase(), s.string().value);
-                if (s instanceof SettingBool) util.addProperty(s.name.toLowerCase(), s.bool().value);
-            });
-            data.add(u.getName().toLowerCase(), util);
-        });
-        ModFile modFile = new ModFile("utils.json");
-        modFile.write(gson.toJson(data), ModFile.WriteMode.OVERWRITE);
-    }
+    public void saveUtilsData(ClientStopEvent event) { saveConfig(currentFile); }
 
     @Subscribe
     public void keyPress(KeyPressEvent event) {
@@ -129,5 +99,44 @@ public class Manager {
 
     public static UtilBase getUtilByName(String uName) {
         return utils.stream().filter(util -> util.getName().toLowerCase().startsWith(uName.toLowerCase())).findFirst().orElse(null);
+    }
+
+    public static void loadConfig(String fileName) {
+        Utilrun.logger.info("Loading " + fileName + " config");
+        ModFile modFile = new ModFile(fileName);
+        if (modFile.readAsList().isEmpty()) modFile.write("{}", ModFile.WriteMode.OVERWRITE);
+        JsonObject data = JsonParser.parseString(modFile.readAsString()).getAsJsonObject();
+
+        utils.forEach(u -> {
+            JsonElement je = data.get(u.getName().toLowerCase());
+            if (je != null) {
+                if (je.getAsJsonObject().get("enabled").getAsBoolean()) u.setEnabled(true);
+                u.getSettings().forEach(s -> {
+                    JsonElement val = je.getAsJsonObject().get(s.name.toLowerCase());
+                    if (val != null) {
+                        if (s instanceof SettingNum) s.num().value = val.getAsDouble();
+                        if (s instanceof SettingString) s.string().value = val.getAsString();
+                        if (s instanceof SettingBool) s.bool().value = val.getAsBoolean();
+                    }
+                });
+            }
+        });
+    }
+
+    public static void saveConfig(String fileName) {
+        Utilrun.logger.info("Saving " + fileName + " config");
+        JsonObject data = new JsonObject();
+        utils.forEach(u -> {
+            JsonObject util = new JsonObject();
+            util.addProperty("enabled", u.isEnabled());
+            u.getSettings().forEach(s -> {
+                if (s instanceof SettingNum) util.addProperty(s.name.toLowerCase(), s.num().value);
+                if (s instanceof SettingString) util.addProperty(s.name.toLowerCase(), s.string().value);
+                if (s instanceof SettingBool) util.addProperty(s.name.toLowerCase(), s.bool().value);
+            });
+            data.add(u.getName().toLowerCase(), util);
+        });
+        ModFile modFile = new ModFile(fileName);
+        modFile.write(gson.toJson(data), ModFile.WriteMode.OVERWRITE);
     }
 }
