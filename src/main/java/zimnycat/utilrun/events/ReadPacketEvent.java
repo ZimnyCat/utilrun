@@ -1,6 +1,6 @@
 package zimnycat.utilrun.events;
 
-import net.minecraft.network.Packet;
+import net.minecraft.network.packet.Packet;
 import zimnycat.utilrun.base.EventBase;
 
 public class ReadPacketEvent extends EventBase {

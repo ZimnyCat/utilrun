@@ -7,7 +7,7 @@ import zimnycat.utilrun.base.Manager;
 import java.io.File;
 
 public class ConfigCmd extends CommandBase {
-    public ConfigCmd() { super("config", "Manages configurations"); }
+    public ConfigCmd() { super("config", "Manage configurations"); }
 
     @Override
     public void run(String[] args) {
